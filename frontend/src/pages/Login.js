@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import toast from 'react-hot-toast';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
@@ -15,7 +15,7 @@ const Login = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -25,15 +25,15 @@ const Login = () => {
 
     try {
       const result = await login(formData.email, formData.password);
-      
+
       if (result.success) {
-        toast.success('Login successful!');
-        navigate('/dashboard');
+        toast.success("Login successful!");
+        navigate("/dashboard");
       } else {
         toast.error(result.error);
       }
     } catch (error) {
-      toast.error('An error occurred during login');
+      toast.error("An error occurred during login");
     } finally {
       setIsLoading(false);
     }
@@ -46,20 +46,11 @@ const Login = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link
-              to="/register"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              create a new account
-            </Link>
-          </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-3" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email" className="sr-only">
+            <div className="space-y-1">
+              <label htmlFor="email" className="">
                 Email address
               </label>
               <input
@@ -74,8 +65,8 @@ const Login = () => {
                 onChange={handleChange}
               />
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
+            <div className="space-y-1"> 
+              <label htmlFor="password" className="">
                 Password
               </label>
               <input
@@ -101,14 +92,23 @@ const Login = () => {
               {isLoading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
-                'Sign in'
+                "Sign in"
               )}
             </button>
           </div>
         </form>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Or{" "}
+          <Link
+            to="/register"
+            className="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            create a new account
+          </Link>
+        </p>
       </div>
     </div>
   );
 };
 
-export default Login; 
+export default Login;

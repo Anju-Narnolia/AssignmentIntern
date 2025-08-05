@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { sessionsAPI } from '../services/api';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { sessionsAPI } from "../services/api";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
   const [sessions, setSessions] = useState([]);
@@ -18,7 +18,7 @@ const Dashboard = () => {
       const response = await sessionsAPI.getPublicSessions();
       setSessions(response.data.sessions);
     } catch (error) {
-      toast.error('Failed to fetch sessions');
+      toast.error("Failed to fetch sessions");
     } finally {
       setLoading(false);
     }
@@ -26,7 +26,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     logout();
-    toast.success('Logged out successfully');
+    toast.success("Logged out successfully");
   };
 
   if (loading) {
@@ -50,23 +50,26 @@ const Dashboard = () => {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-700">
-                Welcome, {user?.email}
+                Welcome, {user?.name}
               </span>
-              <Link
-                to="/my-sessions"
-                className="text-indigo-600 hover:text-indigo-500 text-sm font-medium"
-              >
-                My Sessions
-              </Link>
+            </div>
+            <div className="flex items-center space-x-4">
               <Link
                 to="/session-editor"
                 className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
               >
                 Create Session
               </Link>
+              <Link
+                to="/my-sessions"
+                className="text-indigo-600 hover:text-indigo-500 text-sm font-medium"
+              >
+                My Sessions
+              </Link>
+
               <button
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                className="text-red-600 hover:text-indigo-600 text-sm font-medium"
               >
                 Logout
               </button>
@@ -114,7 +117,7 @@ const Dashboard = () => {
                         Published
                       </span>
                     </div>
-                    
+
                     {session.tags && session.tags.length > 0 && (
                       <div className="mb-4">
                         <div className="flex flex-wrap gap-1">
@@ -132,7 +135,10 @@ const Dashboard = () => {
 
                     <div className="text-sm text-gray-500 mb-4">
                       <p>By: {session.author}</p>
-                      <p>Created: {new Date(session.createdAt).toLocaleDateString()}</p>
+                      <p>
+                        Created:{" "}
+                        {new Date(session.createdAt).toLocaleDateString()}
+                      </p>
                     </div>
 
                     <div className="flex justify-between items-center">
@@ -156,4 +162,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

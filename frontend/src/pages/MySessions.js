@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { sessionsAPI } from '../services/api';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { sessionsAPI } from "../services/api";
+import toast from "react-hot-toast";
 
 const MySessions = () => {
   const [sessions, setSessions] = useState([]);
@@ -18,37 +18,39 @@ const MySessions = () => {
       const response = await sessionsAPI.getMySessions();
       setSessions(response.data.sessions);
     } catch (error) {
-      toast.error('Failed to fetch your sessions');
+      toast.error("Failed to fetch your sessions");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (sessionId) => {
-    if (!window.confirm('Are you sure you want to delete this session?')) {
+    if (!window.confirm("Are you sure you want to delete this session?")) {
       return;
     }
 
     try {
       await sessionsAPI.deleteSession(sessionId);
-      setSessions(sessions.filter(session => session.id !== sessionId));
-      toast.success('Session deleted successfully');
+      setSessions(sessions.filter((session) => session.id !== sessionId));
+      toast.success("Session deleted successfully");
     } catch (error) {
-      toast.error('Failed to delete session');
+      toast.error("Failed to delete session");
     }
   };
 
   const handlePublish = async (sessionId) => {
     try {
       await sessionsAPI.publishSession(sessionId);
-      setSessions(sessions.map(session => 
-        session.id === sessionId 
-          ? { ...session, status: 'published' }
-          : session
-      ));
-      toast.success('Session published successfully');
+      setSessions(
+        sessions.map((session) =>
+          session.id === sessionId
+            ? { ...session, status: "published" }
+            : session
+        )
+      );
+      toast.success("Session published successfully");
     } catch (error) {
-      toast.error('Failed to publish session');
+      toast.error("Failed to publish session");
     }
   };
 
@@ -67,14 +69,19 @@ const MySessions = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link to="/dashboard" className="text-xl font-semibold text-gray-900">
+              <Link
+                to="/dashboard"
+                className="text-xl font-semibold text-gray-900"
+              >
                 Wellness Platform
               </Link>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-700">
-                Welcome, {user?.email}
+                Welcome, {user?.name}
               </span>
+            </div>
+            <div className="flex items-center space-x-4">
               <Link
                 to="/session-editor"
                 className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
@@ -90,9 +97,7 @@ const MySessions = () => {
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              My Sessions
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900">My Sessions</h2>
             <Link
               to="/session-editor"
               className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
@@ -127,15 +132,17 @@ const MySessions = () => {
                       <h3 className="text-lg font-medium text-gray-900 truncate">
                         {session.title}
                       </h3>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        session.status === 'published' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {session.status === 'published' ? 'Published' : 'Draft'}
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          session.status === "published"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {session.status === "published" ? "Published" : "Draft"}
                       </span>
                     </div>
-                    
+
                     {session.tags && session.tags.length > 0 && (
                       <div className="mb-4">
                         <div className="flex flex-wrap gap-1">
@@ -152,8 +159,14 @@ const MySessions = () => {
                     )}
 
                     <div className="text-sm text-gray-500 mb-4">
-                      <p>Created: {new Date(session.createdAt).toLocaleDateString()}</p>
-                      <p>Updated: {new Date(session.updatedAt).toLocaleDateString()}</p>
+                      <p>
+                        Created:{" "}
+                        {new Date(session.createdAt).toLocaleDateString()}
+                      </p>
+                      <p>
+                        Updated:{" "}
+                        {new Date(session.updatedAt).toLocaleDateString()}
+                      </p>
                     </div>
 
                     <div className="flex justify-between items-center">
@@ -164,7 +177,7 @@ const MySessions = () => {
                         >
                           Edit
                         </Link>
-                        {session.status === 'draft' && (
+                        {session.status === "draft" && (
                           <button
                             onClick={() => handlePublish(session.id)}
                             className="text-green-600 hover:text-green-500 text-sm font-medium"
@@ -199,4 +212,4 @@ const MySessions = () => {
   );
 };
 
-export default MySessions; 
+export default MySessions;

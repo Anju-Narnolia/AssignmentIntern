@@ -17,7 +17,7 @@ const generateToken = (userId) => {
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Validation
     if (!email || !password) {
@@ -35,7 +35,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Create new user
-    const user = new User({ email, password });
+    const user = new User({ name, email, password });
     await user.save();
 
     // Generate token
@@ -45,6 +45,7 @@ router.post('/register', async (req, res) => {
       message: 'User registered successfully',
       token,
       user: {
+        name:user.name,
         id: user._id,
         email: user.email,
         createdAt: user.createdAt
@@ -52,6 +53,14 @@ router.post('/register', async (req, res) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
+    // If error is a Mongoose validation error, return the specific message
+    if (error.name === 'ValidationError') {
+      const errors = {};
+      for (const field in error.errors) {
+        errors[field] = error.errors[field].message;
+      }
+      return res.status(400).json({ error: 'Validation failed', details: errors });
+    }
     res.status(500).json({ error: 'Registration failed' });
   }
 });
@@ -101,6 +110,7 @@ router.get('/me', auth, async (req, res) => {
   try {
     res.json({
       user: {
+        name:req.user.name,
         id: req.user._id,
         email: req.user.email,
         createdAt: req.user.createdAt
