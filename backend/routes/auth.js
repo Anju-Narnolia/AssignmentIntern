@@ -19,6 +19,12 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
+    // Check if JWT_SECRET is configured
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not configured');
+      return res.status(500).json({ error: 'Server configuration error' });
+    }
+
     // Validation
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
@@ -61,7 +67,13 @@ router.post('/register', async (req, res) => {
       }
       return res.status(400).json({ error: 'Validation failed', details: errors });
     }
-    res.status(500).json({ error: 'Registration failed' });
+    
+    // Check for specific error types
+    if (error.name === 'MongoError' || error.name === 'MongoServerError') {
+      return res.status(500).json({ error: 'Database connection error' });
+    }
+    
+    res.status(500).json({ error: 'Registration failed', details: process.env.NODE_ENV === 'development' ? error.message : undefined });
   }
 });
 
@@ -69,6 +81,12 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Check if JWT_SECRET is configured
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not configured');
+      return res.status(500).json({ error: 'Server configuration error' });
+    }
 
     // Validation
     if (!email || !password) {
@@ -101,7 +119,17 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    
+    // Check for specific error types
+    if (error.name === 'MongoError' || error.name === 'MongoServerError') {
+      return res.status(500).json({ error: 'Database connection error' });
+    }
+    
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(500).json({ error: 'Token generation error' });
+    }
+    
+    res.status(500).json({ error: 'Login failed', details: process.env.NODE_ENV === 'development' ? error.message : undefined });
   }
 });
 

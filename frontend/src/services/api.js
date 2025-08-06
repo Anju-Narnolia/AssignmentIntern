@@ -1,12 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api'  // In production, use relative path since frontend is served from backend
-  : (process.env.REACT_APP_API_URL || 'http://localhost:5000/api');
+const API_BASE = process.env.REACT_APP_API || 'https://assignmentintern.onrender.com';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -42,40 +40,40 @@ api.interceptors.response.use(
 // Auth API calls
 export const authAPI = {
   register: (name, email, password) => 
-    api.post('/auth/register', {name, email, password }),
+    api.post('/api/auth/register', { name, email, password }),
   
   login: (email, password) => 
-    api.post('/auth/login', { email, password }),
+    api.post('/api/auth/login', { email, password }),
   
   getCurrentUser: () => 
-    api.get('/auth/me'),
+    api.get('/api/auth/me'),
 };
 
 // Sessions API calls
 export const sessionsAPI = {
   // Get all published sessions (public)
   getPublicSessions: () => 
-    api.get('/sessions'),
+    api.get('/api/sessions'),
   
   // Get user's own sessions (draft + published)
   getMySessions: () => 
-    api.get('/sessions/my-sessions'),
+    api.get('/api/sessions/my-sessions'),
   
   // Get a single user session
   getMySession: (id) => 
-    api.get(`/sessions/my-sessions/${id}`),
+    api.get(`/api/sessions/my-sessions/${id}`),
   
   // Save or update a draft session
   saveDraft: (data) => 
-    api.post('/sessions/save-draft', data),
+    api.post('/api/sessions/save-draft', data),
   
   // Publish a session
   publishSession: (sessionId) => 
-    api.post('/sessions/publish', { sessionId }),
+    api.post('/api/sessions/publish', { sessionId }),
   
   // Delete a session
   deleteSession: (id) => 
-    api.delete(`/sessions/my-sessions/${id}`),
+    api.delete(`/api/sessions/my-sessions/${id}`),
 };
 
 export default api; 
