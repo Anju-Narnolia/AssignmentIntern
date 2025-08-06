@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/wellness-platform')
+mongoose.connect(process.env.MONGODB_URI || 'MONGODB_URI=mongodb+srv://anjunarnolia93750:qWiLjs3f1uHi62aK@clusterone.tqaod8i.mongodb.net/wellness-platform?retryWrites=true&w=majority')
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => {
   console.error('MongoDB connection error:', err);
