@@ -56,10 +56,11 @@ cp env.example .env
 ```env
 PORT=5000
 NODE_ENV=development
-MONGODB_URI=mongodb://localhost:27017/wellness-platform
+
+# MongoDB Configuration
+MONGODB_URI=mongodb+srv://anjunarnolia93750:qWiLjs3f1uHi62aK@clusterone.tqaod8i.mongodb.net/wellness-platform?retryWrites=true&w=majority
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 JWT_EXPIRES_IN=7d
-CORS_ORIGIN=http://localhost:3000
 ```
 
 5. Start the backend server:
